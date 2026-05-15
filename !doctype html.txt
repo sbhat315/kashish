@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Talk to Kashish</title>
+  </head>
+  <body style="font-family: system-ui; padding: 24px; max-width: 720px;">
+    <h2>Talk to Kashish</h2>
+    <p>Status: <span id="status">idle</span></p>
+
+    <button id="start" style="padding: 12px 16px;">Start</button>
+    <button id="stop" style="padding: 12px 16px; margin-left: 8px;">Stop</button>
+
+    <script type="module">
+      import Vapi from "https://cdn.skypack.dev/@vapi-ai/web";
+
+      const statusEl = document.getElementById("status");
+
+      // TODO: paste your Vapi PUBLIC key below
+     const vapi = new Vapi("ab0aa940-8b2d-4aab-8f61-4ed7c8308a7c");
+
+      // Kashish assistant
+      const ASSISTANT_ID = "6cdc2569-d9cf-49c0-a634-217f2fd3835d";
+
+      document.getElementById("start").onclick = () => {
+        statusEl.textContent = "connecting...";
+        vapi.start(ASSISTANT_ID);
+      };
+
+      document.getElementById("stop").onclick = () => vapi.stop();
+
+      vapi.on("call-start", () => (statusEl.textContent = "connected"));
+      vapi.on("call-end", () => (statusEl.textContent = "ended"));
+      vapi.on("error", (e) => {
+        statusEl.textContent = "error (open console)";
+        console.error(e);
+      });
+    </script>
+  </body>
+</html>
